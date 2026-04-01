@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  name                String?
+  email               String    @unique
+  password            String?
+  phone               String?
+  avatar              String?
+  role                String    @default("client") // client, admin
+  emailVerified       Boolean   @default(false)
+  isActive            Boolean   @default(true)
+  lastLogin           DateTime?
+  verificationToken   String?   @unique
+  resetToken          String?   @unique
+  resetTokenExpiry    DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  bookings            Booking[]
+  estimates           Estimate[]
+  payments            Payment[]
+  conversations       Conversation[]
+  adminConversations  Conversation[] @relation("AdminConversations")
+}
+
+model Booking {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  eventType     String
+  eventName     String
+  guestCount    Int
+  eventDate     DateTime?
+  location      String?
+  description   String?
+  venueType     String?
+  cateringPackage String?
+  services      String    // JSON string of selected services
+  addOns        String?   // JSON string of add-ons
+  status        String    @default("pending") // pending, confirmed, completed, cancelled
+  totalCost     Float
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  payments      Payment[]
+}
+
+model Estimate {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  eventType     String
+  guestCount    Int
+  venueType     String?
+  cateringPackage String?
+  services      String    // JSON string
+  addOns        String?   // JSON string
+  subtotal      Float
+  serviceFee    Float
+  tax           Float
+  totalCost     Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Payment {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  bookingId     String?
+  booking       Booking?  @relation(fields: [bookingId], references: [id])
+  amount        Float
+  gateway       String    @default("manual") // manual, flutterwave, paystack
+  method        String    @default("card") // card, bank_transfer, ussd, mobile_money, cash
+  status        String    @default("pending") // pending, paid, failed, refunded
+  transactionId String?   @unique
+  reference     String?   @unique   // gateway payment reference
+  customerEmail String?
+  customerName  String?
+  paidAt        DateTime?
+  metadata      String?   // JSON string for additional gateway data
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model ContactMessage {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  eventType     String?
+  preferredDate String?
+  message       String
+  isRead        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+}
+
+model Newsletter {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+}
+
+model BlogPost {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String?
+  content       String?
+  image         String?
+  category      String?
+  readTime      String?
+  isPublished   Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// ─── Site Configuration ───
+model SiteConfig {
+  id           String   @id @default(cuid())
+  key          String   @unique
+  value        String
+  updatedAt    DateTime @updatedAt
+}
+
+// ─── Real-time Chat ───
+model Conversation {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  adminId         String?
+  admin           User?    @relation("AdminConversations", fields: [adminId], references: [id])
+  status          String   @default("open") // open, resolved, closed
+  lastMessage     String?
+  lastMessageAt   DateTime @default(now())
+  userUnreadCount Int      @default(0)
+  adminUnreadCount Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  messages        ChatMessage[]
+}
+
+model ChatMessage {
+  id              String   @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id])
+  senderType      String   // user, admin
+  senderId        String
+  senderName      String?
+  content         String
+  isRead          Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  @@index([conversationId])
+}

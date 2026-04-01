@@ -112,7 +112,7 @@ export default function Footer() {
               From intimate gatherings to grand celebrations, we handle every detail with precision and elegance.
             </p>
             <div className="space-y-3">
-              <a href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1234567890'}`} className="flex items-center gap-3 text-cream/50 hover:text-gold text-sm transition-colors">
+              <a href={`tel:${(process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1 (234) 567-890').replace(/[\s()-]/g, '')}`} className="flex items-center gap-3 text-cream/50 hover:text-gold text-sm transition-colors">
                 <Phone className="w-4 h-4" />
                 <span>{process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1 (234) 567-890'}</span>
               </a>

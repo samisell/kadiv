@@ -112,9 +112,9 @@ export default function Footer() {
               From intimate gatherings to grand celebrations, we handle every detail with precision and elegance.
             </p>
             <div className="space-y-3">
-              <a href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE || '+23412345678'}`} className="flex items-center gap-3 text-cream/50 hover:text-gold text-sm transition-colors">
+              <a href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1234567890'}`} className="flex items-center gap-3 text-cream/50 hover:text-gold text-sm transition-colors">
                 <Phone className="w-4 h-4" />
-                <span>{process.env.NEXT_PUBLIC_COMPANY_PHONE || '+234 (1) 234-5678'}</span>
+                <span>{process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1 (234) 567-890'}</span>
               </a>
               <a href={`mailto:${process.env.NEXT_PUBLIC_COMPANY_EMAIL || 'info@kadiv.com'}`} className="flex items-center gap-3 text-cream/50 hover:text-gold text-sm transition-colors">
                 <Mail className="w-4 h-4" />
@@ -122,7 +122,7 @@ export default function Footer() {
               </a>
               <div className="flex items-center gap-3 text-cream/50 text-sm">
                 <MapPin className="w-4 h-4 shrink-0" />
-                <span>{process.env.NEXT_PUBLIC_COMPANY_ADDRESS || 'Plot 12, Victoria Island, Lagos, Nigeria'}</span>
+                <span>{process.env.NEXT_PUBLIC_COMPANY_ADDRESS || '2541 Routh St, Dallas, TX 75201'}</span>
               </div>
             </div>
           </div>

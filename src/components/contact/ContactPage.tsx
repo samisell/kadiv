@@ -56,7 +56,7 @@ const CONTACT_CARDS = [
   {
     icon: Phone,
     title: 'Phone',
-    lines: [process.env.NEXT_PUBLIC_COMPANY_PHONE || '+234 (1) 234-5678', 'Mon - Sat, 9am - 6pm'],
+    lines: [process.env.NEXT_PUBLIC_COMPANY_PHONE || '+1 (234) 567-890', 'Mon - Sat, 9am - 6pm'],
     extraIcon: Clock,
   },
   {
@@ -67,7 +67,7 @@ const CONTACT_CARDS = [
   {
     icon: MapPin,
     title: 'Address',
-    lines: ['Plot 12, Victoria Island', 'Lagos, Nigeria'],
+    lines: ['2541 Routh St', 'Dallas, TX 75201'],
   },
 ] as const;
 
